@@ -111,10 +111,11 @@ export class AutoScheduleService {
     for (const leave of leaves) {
       const key = `${leave.employeeId}_${leave.leaveDate.toISOString().split('T')[0]}`;
       if (!leaveMap.has(key)) leaveMap.set(key, new Set());
+      const leaveSet = leaveMap.get(key)!;
       if (leave.shiftType) {
-        leaveMap.get(key).add(leave.shiftType);
+        leaveSet.add(leave.shiftType);
       } else {
-        leaveMap.get(key).add('ALL');
+        leaveSet.add('ALL');
       }
     }
 
@@ -131,7 +132,7 @@ export class AutoScheduleService {
     for (const assignment of existingAssignments) {
       const key = `${assignment.date.toISOString().split('T')[0]}_${assignment.shiftType}`;
       if (!existingMap.has(key)) existingMap.set(key, []);
-      existingMap.get(key).push(assignment);
+      existingMap.get(key)!.push(assignment);
     }
 
     // 追蹤員工排班狀態
@@ -212,7 +213,7 @@ export class AutoScheduleService {
             }
           }
 
-          const stats = employeeStats.get(emp.id);
+          const stats = employeeStats.get(emp.id)!;
 
           // 檢查連續夜班
           if (
@@ -284,12 +285,12 @@ export class AutoScheduleService {
           newAssignments.push(assignment);
 
           // 更新統計
-          const stats = employeeStats.get(candidate.employee.id);
-          stats.totalShifts++;
+          const empStats = employeeStats.get(candidate.employee.id)!;
+          empStats.totalShifts++;
           if (shiftType === ShiftType.NIGHT) {
-            stats.consecutiveNights++;
+            empStats.consecutiveNights++;
           } else {
-            stats.consecutiveNights = 0;
+            empStats.consecutiveNights = 0;
           }
 
           assigned++;
@@ -314,7 +315,7 @@ export class AutoScheduleService {
           (a) =>
             a.employeeId === empId &&
             a.shiftType === ShiftType.NIGHT &&
-            a.date.toISOString().split('T')[0] === dateStr,
+            a.date && a.date.toISOString().split('T')[0] === dateStr,
         );
         if (!todayNight) {
           stats.consecutiveNights = 0;

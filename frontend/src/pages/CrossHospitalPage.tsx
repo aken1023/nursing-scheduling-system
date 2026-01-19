@@ -20,7 +20,7 @@ interface StaffingSummary {
 }
 
 export default function CrossHospitalPage() {
-  const [hospitals, setHospitals] = useState<Hospital[]>([])
+  const [_hospitals, setHospitals] = useState<Hospital[]>([])
   const [summaries, setSummaries] = useState<StaffingSummary[]>([])
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const [selectedShiftType, setSelectedShiftType] = useState('DAY')

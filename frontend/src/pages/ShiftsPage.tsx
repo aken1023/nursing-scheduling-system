@@ -7,7 +7,6 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameMonth,
   addMonths,
   subMonths,
   getDay,
@@ -35,7 +34,7 @@ export default function ShiftsPage() {
   const [selectedHospital, setSelectedHospital] = useState<string>('')
   const [currentDate, setCurrentDate] = useState(new Date())
   const [summaries, setSummaries] = useState<Record<string, DaySummary>>({})
-  const [loading, setLoading] = useState(false)
+  const [_loading, setLoading] = useState(false)
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month')
 
   useEffect(() => {

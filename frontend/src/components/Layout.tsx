@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   HomeIcon,
@@ -17,17 +17,19 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAuthStore } from '../stores/authStore'
 import NotificationPanel from './NotificationPanel'
+import { Role, Permission } from '../types/auth.types'
+import { filterNavigation, NavItem } from '../utils/permissions'
 
-const navigation = [
+const navigation: NavItem[] = [
   { name: '首頁', href: '/dashboard', icon: HomeIcon },
-  { name: '班表管理', href: '/shifts', icon: CalendarDaysIcon },
-  { name: '自動排班', href: '/auto-schedule', icon: CpuChipIcon },
-  { name: '班表範本', href: '/shift-templates', icon: DocumentDuplicateIcon },
-  { name: '換班申請', href: '/shift-swaps', icon: ArrowPathIcon },
-  { name: '請假管理', href: '/leaves', icon: ClipboardDocumentListIcon },
-  { name: '跨院調度', href: '/cross-hospital', icon: ArrowsRightLeftIcon },
-  { name: '報表匯出', href: '/export', icon: DocumentArrowDownIcon },
-  { name: '員工管理', href: '/employees', icon: UsersIcon },
+  { name: '班表管理', href: '/shifts', icon: CalendarDaysIcon, requiredPermissions: [Permission.SHIFT_READ] },
+  { name: '自動排班', href: '/auto-schedule', icon: CpuChipIcon, requiredRole: Role.LEADER },
+  { name: '班表範本', href: '/shift-templates', icon: DocumentDuplicateIcon, requiredRole: Role.LEADER },
+  { name: '換班申請', href: '/shift-swaps', icon: ArrowPathIcon, requiredPermissions: [Permission.SWAP_READ] },
+  { name: '請假管理', href: '/leaves', icon: ClipboardDocumentListIcon, requiredPermissions: [Permission.LEAVE_READ] },
+  { name: '跨院調度', href: '/cross-hospital', icon: ArrowsRightLeftIcon, requiredRole: Role.LEADER },
+  { name: '報表匯出', href: '/export', icon: DocumentArrowDownIcon, requiredRole: Role.LEADER },
+  { name: '員工管理', href: '/employees', icon: UsersIcon, requiredPermissions: [Permission.EMPLOYEE_READ] },
 ]
 
 export default function Layout() {
@@ -35,6 +37,12 @@ export default function Layout() {
   const [notificationOpen, setNotificationOpen] = useState(false)
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
+
+  // 根據使用者權限過濾導航項目
+  const filteredNavigation = useMemo(
+    () => filterNavigation(user, navigation),
+    [user]
+  )
 
   const handleLogout = () => {
     logout()
@@ -61,7 +69,7 @@ export default function Layout() {
             </button>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => (
+            {filteredNavigation.map((item) => (
               <NavLink
                 key={item.name}
                 to={item.href}

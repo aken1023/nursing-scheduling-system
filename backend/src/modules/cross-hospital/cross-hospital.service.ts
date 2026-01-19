@@ -9,6 +9,7 @@ import { ShiftRequirement } from '../../entities/shift-requirement.entity';
 import { Notification, NotificationType, NotificationChannel, NotificationStatus } from '../../entities/notification.entity';
 import { CreateCrossHospitalDto } from './dto/create-cross-hospital.dto';
 import { QueryCrossHospitalDto } from './dto/query-cross-hospital.dto';
+import { CurrentUserPayload } from '../../common/decorators/current-user.decorator';
 
 @Injectable()
 export class CrossHospitalService {
@@ -54,7 +55,7 @@ export class CrossHospitalService {
     return saved;
   }
 
-  async findAll(query: QueryCrossHospitalDto) {
+  async findAll(query: QueryCrossHospitalDto, user?: CurrentUserPayload) {
     const { page = 1, limit = 20, status, fromHospitalId, toHospitalId, date } = query;
 
     const queryBuilder = this.requestRepository
@@ -63,6 +64,14 @@ export class CrossHospitalService {
       .leftJoinAndSelect('req.fromHospital', 'fromHospital')
       .leftJoinAndSelect('req.toHospital', 'toHospital')
       .leftJoinAndSelect('req.requester', 'requester');
+
+    // 非 Admin 只能看到自己院區相關的調度
+    if (user && user.role !== 'admin' && user.hospitalIds?.length > 0) {
+      queryBuilder.andWhere(
+        '(req.fromHospitalId IN (:...hospitalIds) OR req.toHospitalId IN (:...hospitalIds))',
+        { hospitalIds: user.hospitalIds },
+      );
+    }
 
     if (status) {
       queryBuilder.andWhere('req.status = :status', { status });

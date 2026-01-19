@@ -3,16 +3,20 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ExportService } from './export.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/enums/role.enum';
 
 @ApiTags('報表匯出')
 @Controller('export')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth()
 export class ExportController {
   constructor(private readonly exportService: ExportService) {}
 
   @Get('excel')
   @ApiOperation({ summary: '匯出 Excel' })
+  @Roles(Role.LEADER)
   async exportExcel(
     @Query('hospitalId') hospitalId: string,
     @Query('startDate') startDate: string,
@@ -40,6 +44,7 @@ export class ExportController {
 
   @Get('pdf')
   @ApiOperation({ summary: '匯出 PDF' })
+  @Roles(Role.LEADER)
   async exportPdf(
     @Query('hospitalId') hospitalId: string,
     @Query('startDate') startDate: string,

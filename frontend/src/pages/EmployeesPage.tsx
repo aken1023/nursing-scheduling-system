@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { PlusIcon, PencilIcon, TrashIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { employeesApi, hospitalsApi } from '../services/api'
 import toast from 'react-hot-toast'
+import { usePermissions } from '../hooks/usePermissions'
 
 interface Employee {
   id: string
@@ -27,6 +28,7 @@ interface Hospital {
 
 export default function EmployeesPage() {
   const navigate = useNavigate()
+  const { canCreateEmployees, canUpdateEmployees, canDeleteEmployees } = usePermissions()
   const [employees, setEmployees] = useState<Employee[]>([])
   const [hospitals, setHospitals] = useState<Hospital[]>([])
   const [loading, setLoading] = useState(false)
@@ -159,13 +161,15 @@ export default function EmployeesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">員工管理</h1>
-        <button
-          onClick={() => handleOpenModal()}
-          className="btn-primary flex items-center gap-2"
-        >
-          <PlusIcon className="h-5 w-5" />
-          新增員工
-        </button>
+        {canCreateEmployees && (
+          <button
+            onClick={() => handleOpenModal()}
+            className="btn-primary flex items-center gap-2"
+          >
+            <PlusIcon className="h-5 w-5" />
+            新增員工
+          </button>
+        )}
       </div>
 
       {/* Filters */}
@@ -254,20 +258,24 @@ export default function EmployeesPage() {
                       >
                         <Cog6ToothIcon className="h-5 w-5" />
                       </button>
-                      <button
-                        onClick={() => handleOpenModal(emp)}
-                        className="p-1 text-gray-500 hover:text-primary-500 ml-2"
-                        title="編輯"
-                      >
-                        <PencilIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(emp.id)}
-                        className="p-1 text-gray-500 hover:text-red-500 ml-2"
-                        title="刪除"
-                      >
-                        <TrashIcon className="h-5 w-5" />
-                      </button>
+                      {canUpdateEmployees && (
+                        <button
+                          onClick={() => handleOpenModal(emp)}
+                          className="p-1 text-gray-500 hover:text-primary-500 ml-2"
+                          title="編輯"
+                        >
+                          <PencilIcon className="h-5 w-5" />
+                        </button>
+                      )}
+                      {canDeleteEmployees && (
+                        <button
+                          onClick={() => handleDelete(emp.id)}
+                          className="p-1 text-gray-500 hover:text-red-500 ml-2"
+                          title="刪除"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

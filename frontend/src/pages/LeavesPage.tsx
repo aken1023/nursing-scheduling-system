@@ -4,6 +4,7 @@ import { leavesApi } from '../services/api'
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 import toast from 'react-hot-toast'
+import { usePermissions } from '../hooks/usePermissions'
 
 interface LeaveRequest {
   id: string
@@ -19,6 +20,7 @@ interface LeaveRequest {
 }
 
 export default function LeavesPage() {
+  const { canApproveLeaves } = usePermissions()
   const [leaves, setLeaves] = useState<LeaveRequest[]>([])
   const [loading, setLoading] = useState(false)
   const [filter, setFilter] = useState<string>('pending')
@@ -211,7 +213,7 @@ export default function LeavesPage() {
                     )}
                   </div>
 
-                  {leave.status === 'pending' && (
+                  {leave.status === 'pending' && canApproveLeaves && (
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setShowRejectModal(leave.id)}

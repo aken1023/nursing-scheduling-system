@@ -8,6 +8,7 @@ interface User {
   name: string
   role: string
   isLeader: boolean
+  isDeputy?: boolean
   hospitals: Array<{ id: string; name: string }>
 }
 

@@ -9,6 +9,10 @@ import LeavesPage from './pages/LeavesPage'
 import CrossHospitalPage from './pages/CrossHospitalPage'
 import ExportPage from './pages/ExportPage'
 import EmployeesPage from './pages/EmployeesPage'
+import EmployeePreferencesPage from './pages/EmployeePreferencesPage'
+import ShiftTemplatesPage from './pages/ShiftTemplatesPage'
+import ShiftSwapsPage from './pages/ShiftSwapsPage'
+import AutoSchedulePage from './pages/AutoSchedulePage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -35,6 +39,10 @@ function App() {
         <Route path="cross-hospital" element={<CrossHospitalPage />} />
         <Route path="export" element={<ExportPage />} />
         <Route path="employees" element={<EmployeesPage />} />
+        <Route path="employees/:id/preferences" element={<EmployeePreferencesPage />} />
+        <Route path="shift-templates" element={<ShiftTemplatesPage />} />
+        <Route path="shift-swaps" element={<ShiftSwapsPage />} />
+        <Route path="auto-schedule" element={<AutoSchedulePage />} />
       </Route>
     </Routes>
   )

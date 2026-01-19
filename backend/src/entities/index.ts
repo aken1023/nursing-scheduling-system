@@ -6,3 +6,8 @@ export * from './shift-adjustment-log.entity';
 export * from './leave-request.entity';
 export * from './cross-hospital-request.entity';
 export * from './notification.entity';
+export * from './employee-preference.entity';
+export * from './shift-template.entity';
+export * from './shift-template-item.entity';
+export * from './shift-swap-request.entity';
+export * from './auto-schedule-run.entity';

@@ -169,7 +169,103 @@ CREATE TABLE IF NOT EXISTS notifications (
     INDEX idx_type (type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 10. 員工偏好設定
+CREATE TABLE IF NOT EXISTS employee_preferences (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    employee_id CHAR(36) NOT NULL,
+    preference_type ENUM('preferred', 'avoid', 'unavailable') NOT NULL,
+    shift_type ENUM('DAY', 'EVENING', 'NIGHT'),
+    day_of_week TINYINT,
+    specific_date DATE,
+    effective_from DATE,
+    effective_to DATE,
+    reason VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
+    INDEX idx_employee (employee_id),
+    INDEX idx_effective (effective_from, effective_to)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 11. 班表範本
+CREATE TABLE IF NOT EXISTS shift_templates (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    name VARCHAR(100) NOT NULL,
+    hospital_id CHAR(36) NOT NULL,
+    description TEXT,
+    cycle_days INT DEFAULT 7,
+    is_active BOOLEAN DEFAULT true,
+    created_by CHAR(36),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (hospital_id) REFERENCES hospitals(id),
+    FOREIGN KEY (created_by) REFERENCES employees(id),
+    INDEX idx_hospital (hospital_id),
+    INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 12. 班表範本項目
+CREATE TABLE IF NOT EXISTS shift_template_items (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    template_id CHAR(36) NOT NULL,
+    day_index INT NOT NULL,
+    shift_type ENUM('DAY', 'EVENING', 'NIGHT', 'OFF') NOT NULL,
+    required_count INT DEFAULT 1,
+    leader_required INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (template_id) REFERENCES shift_templates(id) ON DELETE CASCADE,
+    INDEX idx_template (template_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 13. 換班申請
+CREATE TABLE IF NOT EXISTS shift_swap_requests (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    requester_id CHAR(36) NOT NULL,
+    requester_assignment_id CHAR(36) NOT NULL,
+    target_id CHAR(36) NOT NULL,
+    target_assignment_id CHAR(36) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected', 'cancelled') DEFAULT 'pending',
+    reason TEXT,
+    reject_reason VARCHAR(255),
+    approved_by CHAR(36),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (requester_id) REFERENCES employees(id),
+    FOREIGN KEY (target_id) REFERENCES employees(id),
+    FOREIGN KEY (requester_assignment_id) REFERENCES shift_assignments(id),
+    FOREIGN KEY (target_assignment_id) REFERENCES shift_assignments(id),
+    FOREIGN KEY (approved_by) REFERENCES employees(id),
+    INDEX idx_requester (requester_id),
+    INDEX idx_target (target_id),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 14. 自動排班執行記錄
+CREATE TABLE IF NOT EXISTS auto_schedule_runs (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    hospital_id CHAR(36) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    template_id CHAR(36),
+    status ENUM('pending', 'running', 'completed', 'failed') DEFAULT 'pending',
+    total_shifts INT DEFAULT 0,
+    filled_shifts INT DEFAULT 0,
+    conflict_count INT DEFAULT 0,
+    result_summary JSON,
+    initiated_by CHAR(36),
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (hospital_id) REFERENCES hospitals(id),
+    FOREIGN KEY (template_id) REFERENCES shift_templates(id),
+    FOREIGN KEY (initiated_by) REFERENCES employees(id),
+    INDEX idx_hospital (hospital_id),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =============================================
 -- 插入測試資料
+-- =============================================
 
 -- 院區資料
 INSERT INTO hospitals (id, code, name, address) VALUES

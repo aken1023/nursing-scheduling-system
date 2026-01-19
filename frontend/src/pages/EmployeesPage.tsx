@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
+import { PlusIcon, PencilIcon, TrashIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { employeesApi, hospitalsApi } from '../services/api'
 import toast from 'react-hot-toast'
 
@@ -25,6 +26,7 @@ interface Hospital {
 }
 
 export default function EmployeesPage() {
+  const navigate = useNavigate()
   const [employees, setEmployees] = useState<Employee[]>([])
   const [hospitals, setHospitals] = useState<Hospital[]>([])
   const [loading, setLoading] = useState(false)
@@ -246,14 +248,23 @@ export default function EmployeesPage() {
                     </td>
                     <td className="py-3 px-4 text-center">
                       <button
+                        onClick={() => navigate(`/employees/${emp.id}/preferences`)}
+                        className="p-1 text-gray-500 hover:text-blue-500"
+                        title="偏好設定"
+                      >
+                        <Cog6ToothIcon className="h-5 w-5" />
+                      </button>
+                      <button
                         onClick={() => handleOpenModal(emp)}
-                        className="p-1 text-gray-500 hover:text-primary-500"
+                        className="p-1 text-gray-500 hover:text-primary-500 ml-2"
+                        title="編輯"
                       >
                         <PencilIcon className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDelete(emp.id)}
                         className="p-1 text-gray-500 hover:text-red-500 ml-2"
+                        title="刪除"
                       >
                         <TrashIcon className="h-5 w-5" />
                       </button>

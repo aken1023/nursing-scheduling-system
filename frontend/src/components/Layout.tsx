@@ -11,6 +11,9 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
+  DocumentDuplicateIcon,
+  ArrowPathIcon,
+  CpuChipIcon,
 } from '@heroicons/react/24/outline'
 import { useAuthStore } from '../stores/authStore'
 import NotificationPanel from './NotificationPanel'
@@ -18,6 +21,9 @@ import NotificationPanel from './NotificationPanel'
 const navigation = [
   { name: '首頁', href: '/dashboard', icon: HomeIcon },
   { name: '班表管理', href: '/shifts', icon: CalendarDaysIcon },
+  { name: '自動排班', href: '/auto-schedule', icon: CpuChipIcon },
+  { name: '班表範本', href: '/shift-templates', icon: DocumentDuplicateIcon },
+  { name: '換班申請', href: '/shift-swaps', icon: ArrowPathIcon },
   { name: '請假管理', href: '/leaves', icon: ClipboardDocumentListIcon },
   { name: '跨院調度', href: '/cross-hospital', icon: ArrowsRightLeftIcon },
   { name: '報表匯出', href: '/export', icon: DocumentArrowDownIcon },

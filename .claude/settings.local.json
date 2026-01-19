@@ -20,7 +20,14 @@
       "Bash(/c/Program Files/nodejs/npm.cmd install @nestjs/serve-static --save)",
       "Bash(/c/Program Files/nodejs/npm.cmd install @nestjs/serve-static@4.0.0 --save)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: 照護排班系統\n\n護理人員排班管理系統，包含：\n- NestJS 後端 API\n- React 前端（已建置）\n- MySQL 資料庫結構與測試資料\n- 功能：排班管理、請假申請、跨院支援、匯出報表\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(gh repo create:*)",
+      "Bash(gh auth status:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout:*)"
     ]
   }
 }

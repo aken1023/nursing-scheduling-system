@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(npm install)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(/c/Program Files/nodejs/npm.cmd install)",
+      "Bash(npm.cmd install:*)",
+      "Bash(mysql:*)",
+      "Bash(npx nest start)",
+      "Bash(node node_modules/@nestjs/cli/bin/nest.js start:*)",
+      "Bash(npx vite --host)",
+      "Bash(node node_modules/vite/bin/vite.js:*)",
+      "Bash(node -e:*)",
+      "Bash(curl:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MjE1YTIzMS1mNTNiLTExZjAtYjUyNS0xNmQxMTY1NDIzZDYiLCJlbXBsb3llZU5vIjoiQURNSU4wMDEiLCJuYW1lIjoi57O757Wx566h55CG5ZOhIiwicm9sZSI6ImFkbWluIiwiaXNMZWFkZXIiOnRydWUsImlhdCI6MTc2ODgzMDQzNSwiZXhwIjoxNzY5NDM1MjM1fQ.slhubLo6P9HAY7b2MkeHrsaFgcux3LOPuCcldkwrhW8\")",
+      "Bash(__NEW_LINE_bb45706e608de2e9__ echo \"=== 測試員工列表 API ===\")",
+      "Bash(__NEW_LINE_581170429f5271ee__ echo \"\")",
+      "Bash(/c/Program Files/nodejs/npm.cmd install @nestjs/serve-static --save)",
+      "Bash(/c/Program Files/nodejs/npm.cmd install @nestjs/serve-static@4.0.0 --save)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

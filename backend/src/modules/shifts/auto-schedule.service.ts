@@ -5,7 +5,7 @@ import { AutoScheduleRun, ScheduleRunStatus } from '../../entities/auto-schedule
 import { ShiftAssignment, AssignmentStatus } from '../../entities/shift-assignment.entity';
 import { ShiftRequirement, ShiftType } from '../../entities/shift-requirement.entity';
 import { Employee, EmployeeStatus } from '../../entities/employee.entity';
-import { LeaveRequest } from '../../entities/leave-request.entity';
+import { LeaveRequest, LeaveStatus } from '../../entities/leave-request.entity';
 import { ShiftTemplate } from '../../entities/shift-template.entity';
 import { PreferencesService } from '../employees/preferences.service';
 import { AutoScheduleDto, AutoSchedulePreviewResult } from './dto/auto-schedule.dto';
@@ -103,7 +103,7 @@ export class AutoScheduleService {
     const leaves = await this.leaveRepository.find({
       where: {
         leaveDate: Between(startDate, endDate),
-        status: 'approved',
+        status: LeaveStatus.APPROVED,
       },
     });
 
@@ -205,7 +205,7 @@ export class AutoScheduleService {
             if (!canSchedule.canSchedule) {
               result.conflicts.push({
                 type: 'PREFERENCE',
-                description: canSchedule.reason,
+                description: canSchedule.reason || '員工偏好限制',
                 employeeId: emp.id,
                 employeeName: emp.name,
               });

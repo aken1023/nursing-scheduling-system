@@ -52,8 +52,8 @@ export class ShiftsController {
 
   @Get()
   @ApiOperation({ summary: '取得班表' })
-  findAll(@Query() query: QueryShiftDto, @CurrentUser() user: CurrentUserPayload) {
-    return this.shiftsService.findAll(query, user);
+  findAll(@Query() query: QueryShiftDto) {
+    return this.shiftsService.findAll(query);
   }
 
   @Get('summary/:hospitalId/:date')
@@ -191,8 +191,8 @@ export class ShiftsController {
 
   @Get('swaps')
   @ApiOperation({ summary: '取得換班申請列表' })
-  getSwaps(@Query() query: QuerySwapDto, @CurrentUser() user: CurrentUserPayload) {
-    return this.swapService.findAll(query, user);
+  getSwaps(@Query() query: QuerySwapDto) {
+    return this.swapService.findAll(query);
   }
 
   @Post('swaps')

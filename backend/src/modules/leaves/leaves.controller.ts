@@ -35,15 +35,15 @@ export class LeavesController {
 
   @Get()
   @ApiOperation({ summary: '取得請假列表' })
-  findAll(@Query() query: QueryLeaveDto, @CurrentUser() user: CurrentUserPayload) {
-    return this.leavesService.findAll(query, user);
+  findAll(@Query() query: QueryLeaveDto) {
+    return this.leavesService.findAll(query);
   }
 
   @Get('pending-count')
   @ApiOperation({ summary: '取得待審核數量' })
   @Roles(Role.LEADER)
   getPendingCount(@CurrentUser() user: CurrentUserPayload) {
-    return this.leavesService.getPendingCount(user);
+    return this.leavesService.getPendingCount(user.sub);
   }
 
   @Get(':id')

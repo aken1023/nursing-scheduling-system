@@ -42,23 +42,20 @@ export class EmployeesController {
 
   @Get()
   @ApiOperation({ summary: '取得員工列表' })
-  findAll(@Query() query: QueryEmployeeDto, @CurrentUser() user: CurrentUserPayload) {
-    return this.employeesService.findAll(query, user);
+  findAll(@Query() query: QueryEmployeeDto) {
+    return this.employeesService.findAll(query);
   }
 
   @Get('leaders')
   @ApiOperation({ summary: '取得 Leader 列表' })
-  getLeaders(
-    @Query('hospitalId') hospitalId?: string,
-    @CurrentUser() user?: CurrentUserPayload,
-  ) {
-    return this.employeesService.getLeaders(hospitalId, user);
+  getLeaders(@Query('hospitalId') hospitalId?: string) {
+    return this.employeesService.getLeaders(hospitalId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: '取得員工詳情' })
-  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
-    return this.employeesService.findOne(id, user);
+  findOne(@Param('id') id: string) {
+    return this.employeesService.findOne(id);
   }
 
   @Patch(':id')
@@ -86,8 +83,8 @@ export class EmployeesController {
 
   @Get(':id/preferences')
   @ApiOperation({ summary: '取得員工偏好設定' })
-  getPreferences(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
-    return this.preferencesService.findByEmployee(id, user);
+  getPreferences(@Param('id') id: string) {
+    return this.preferencesService.findByEmployee(id);
   }
 
   @Post(':id/preferences')
@@ -95,9 +92,8 @@ export class EmployeesController {
   createPreference(
     @Param('id') id: string,
     @Body() dto: CreatePreferenceDto,
-    @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.preferencesService.create(id, dto, user);
+    return this.preferencesService.create(id, dto);
   }
 
   @Put(':id/preferences/:prefId')
@@ -106,9 +102,8 @@ export class EmployeesController {
     @Param('id') id: string,
     @Param('prefId') prefId: string,
     @Body() dto: UpdatePreferenceDto,
-    @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.preferencesService.update(id, prefId, dto, user);
+    return this.preferencesService.update(id, prefId, dto);
   }
 
   @Delete(':id/preferences/:prefId')
@@ -116,8 +111,7 @@ export class EmployeesController {
   deletePreference(
     @Param('id') id: string,
     @Param('prefId') prefId: string,
-    @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.preferencesService.remove(id, prefId, user);
+    return this.preferencesService.remove(id, prefId);
   }
 }

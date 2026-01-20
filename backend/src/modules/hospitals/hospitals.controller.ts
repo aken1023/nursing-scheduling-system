@@ -36,8 +36,8 @@ export class HospitalsController {
 
   @Get()
   @ApiOperation({ summary: '取得院區列表' })
-  findAll(@CurrentUser() user: CurrentUserPayload) {
-    return this.hospitalsService.findAll(user);
+  findAll() {
+    return this.hospitalsService.findAll();
   }
 
   @Get(':id')
